@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Com quem você combina? Teste de afinidade – Presidente 2026</title>
+<meta name="description" content="15 perguntas sobre economia, políticas sociais, segurança, meio ambiente, instituições e política externa, comparadas com os planos de governo registrados no TSE pelos 12 candidatos a presidente em 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --lcd:#E3E8DC;      /* tela da urna */
+  --lcd-ink:#1D2321;
+  --body:#2C2F31;     /* corpo da urna */
+  --key:#1C1E20;
+  --key-ink:#F4F5F2;
+  --branco:#F6F6F2;
+  --corrige:#D9772B;
+  --confirma:#2F8A4E;
+  --muted:#5B635F;
+  --line:#BFC7B8;
+  --font:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --lcd:#1E2420; --lcd-ink:#E6EBE3; --muted:#A3ADA6; --line:#3A443D;
+    --body:#111314; --key:#2A2D30; --branco:#E9E9E4;
+  }
+}
+:root[data-theme="dark"]{
+  --lcd:#1E2420; --lcd-ink:#E6EBE3; --muted:#A3ADA6; --line:#3A443D;
+  --body:#111314; --key:#2A2D30; --branco:#E9E9E4;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; min-height:100%;
+  background:var(--lcd); color:var(--lcd-ink);
+  font-family:var(--font); font-size:17px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+main{max-width:720px; margin:0 auto; padding:32px 20px 64px}
+h1,h2,h3{line-height:1.15; margin:0}
+p{margin:0 0 1em}
+a{color:inherit; text-underline-offset:3px}
+button{font:inherit; cursor:pointer}
+:focus-visible{outline:3px solid var(--confirma); outline-offset:3px}
+.hidden{display:none !important}
+
+/* ---------- Abertura ---------- */
+.intro h1{font-size:clamp(2.1rem,6vw,3.3rem); font-weight:800; letter-spacing:-.02em; margin-bottom:20px; max-width:16ch}
+.intro .lead{font-size:1.15rem; max-width:58ch}
+.facts{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin:28px 0}
+.facts div{background:var(--lcd); padding:14px 16px}
+.facts strong{display:block; font-size:1.7rem; font-weight:800}
+.facts span{font-size:.9rem; color:var(--muted)}
+.note{font-size:.92rem; color:var(--muted); max-width:62ch}
+
+/* ---------- Teclas no estilo urna ---------- */
+.key{
+  border:0; border-radius:6px; padding:14px 22px; font-weight:700; font-size:1rem;
+  box-shadow:0 3px 0 rgba(0,0,0,.35); transition:transform .06s;
+}
+.key:active{transform:translateY(2px); box-shadow:0 1px 0 rgba(0,0,0,.35)}
+.key-branco{background:var(--branco); color:#1D2321; border:1px solid #9AA095}
+.key-corrige{background:var(--corrige); color:#1D1206}
+.key-confirma{background:var(--confirma); color:#fff}
+.key[disabled]{opacity:.4; cursor:not-allowed}
+.keybar{display:flex; gap:10px; flex-wrap:wrap; margin-top:28px}
+
+/* ---------- Pergunta ---------- */
+.progress{display:flex; justify-content:space-between; align-items:baseline; font-size:.95rem; color:var(--muted); margin-bottom:10px}
+.track{height:6px; background:var(--line); border-radius:3px; overflow:hidden; margin-bottom:36px}
+.track i{display:block; height:100%; background:var(--confirma); width:0; transition:width .25s}
+.topic{font-weight:600; color:var(--muted); margin-bottom:10px}
+.statement{font-size:clamp(1.45rem,4.2vw,2.05rem); font-weight:700; letter-spacing:-.01em; margin-bottom:12px}
+.context{color:var(--muted); max-width:60ch; margin-bottom:26px}
+.scale{display:grid; grid-template-columns:repeat(5,1fr); gap:8px}
+.scale button{
+  background:var(--key); color:var(--key-ink); border:2px solid transparent; border-radius:6px;
+  padding:16px 8px; font-weight:600; font-size:.92rem; line-height:1.2; min-height:72px;
+  box-shadow:0 3px 0 rgba(0,0,0,.35);
+}
+.scale button[aria-pressed="true"]{border-color:var(--confirma); box-shadow:0 0 0 3px var(--confirma)}
+.weight{display:flex; gap:10px; align-items:center; margin-top:22px; font-size:.97rem}
+.weight input{width:20px; height:20px; accent-color:var(--confirma)}
+
+/* ---------- Resultado ---------- */
+.urna{background:var(--body); border-radius:14px; padding:18px; margin-bottom:36px}
+.screen{background:#E3E8DC; color:#1D2321; border-radius:6px; padding:22px 22px 18px; display:grid; grid-template-columns:auto 1fr; gap:6px 22px; align-items:center}
+.screen .role{grid-column:1/-1; font-size:1rem; font-weight:600}
+.digits{display:flex; gap:6px}
+.digits span{width:54px; height:68px; border:2px solid #1D2321; display:grid; place-items:center; font-size:2.6rem; font-weight:800}
+.who h2{font-size:1.6rem; font-weight:800}
+.who p{margin:2px 0 0; font-size:1rem}
+.screen .pct{grid-column:1/-1; border-top:1px solid #9AA095; padding-top:10px; margin-top:10px; font-size:.98rem}
+.urna-foot{display:flex; justify-content:flex-end; gap:8px; margin-top:14px}
+.urna-foot span{width:46px; height:14px; border-radius:3px}
+
+h2.section{font-size:1.35rem; font-weight:800; margin:36px 0 14px}
+.rank{list-style:none; padding:0; margin:0}
+.rank li{border-top:1px solid var(--line)}
+.rank li:last-child{border-bottom:1px solid var(--line)}
+.rank button{
+  width:100%; background:none; border:0; color:inherit; text-align:left;
+  display:grid; grid-template-columns:2.6rem 1fr 4.2rem; gap:12px; align-items:center; padding:14px 2px;
+}
+.rank .num{font-weight:800; font-size:1.15rem}
+.rank .name{font-weight:600}
+.rank .meta{display:block; font-size:.86rem; color:var(--muted); font-weight:400}
+.bar{height:8px; background:var(--line); border-radius:4px; margin-top:6px; overflow:hidden}
+.bar i{display:block; height:100%; background:var(--lcd-ink)}
+.rank .score{font-weight:800; font-size:1.15rem; text-align:right}
+.detail{padding:4px 2px 18px 3.4rem; font-size:.95rem}
+.detail table{width:100%; border-collapse:collapse}
+.detail td{padding:8px 6px 8px 0; vertical-align:top; border-top:1px dashed var(--line)}
+.detail td:first-child{width:44%; color:var(--muted)}
+.tag{display:inline-block; font-size:.8rem; font-weight:700; padding:1px 7px; border-radius:3px; margin-bottom:3px}
+.t-pos{background:#CFE7D6; color:#174A2A}
+.t-neg{background:#F3D9C4; color:#5A2E0B}
+.t-mid{background:#E0E0D8; color:#3A3D3A}
+.few{font-size:.95rem; color:var(--muted)}
+.method{font-size:.95rem; color:var(--muted); max-width:64ch}
+footer{margin-top:44px; padding-top:18px; border-top:1px solid var(--line); font-size:.88rem; color:var(--muted)}
+
+
+.poles{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:14px; font-weight:600}
+.poles div:last-child{text-align:right}
+.poles small{display:block; font-weight:400; color:var(--muted); font-size:.85rem}
+.scale5{display:grid; grid-template-columns:repeat(5,1fr); gap:8px}
+.scale5 button{background:var(--key); color:var(--key-ink); border:2px solid transparent; border-radius:6px; padding:14px 6px; font-weight:800; font-size:1.4rem; box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.scale5 button span{display:block; font-size:.78rem; font-weight:500; margin-top:2px}
+.scale5 button[aria-pressed="true"]{border-color:var(--confirma); box-shadow:0 0 0 3px var(--confirma)}
+.dims{width:100%; border-collapse:collapse; font-size:.95rem}
+.dims th,.dims td{text-align:left; padding:10px 8px 10px 0; border-top:1px solid var(--line); vertical-align:top}
+.dims th{font-weight:700}
+.dimbars{margin:6px 0 14px}
+.dimbars div{display:grid; grid-template-columns:9.5rem 1fr 3rem; gap:10px; align-items:center; font-size:.9rem; padding:3px 0}
+.dimbars .bar{margin:0}
+.dimbars b{text-align:right}
+.sparse{font-size:.85rem; color:var(--muted); margin-top:6px}
+@media (max-width:620px){ .scale5 button span{display:none} .dimbars div{grid-template-columns:7rem 1fr 2.6rem} .poles{font-size:.92rem} }
+
+@media (max-width:620px){
+  .scale{grid-template-columns:1fr}
+  .scale button{min-height:0; padding:14px 16px; text-align:left}
+  .facts{grid-template-columns:1fr}
+  .digits span{width:44px; height:56px; font-size:2.1rem}
+  .detail{padding-left:2px}
+  .rank button{grid-template-columns:2.2rem 1fr 3.6rem}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+</style>
+</head>
+<body>
+<main>
+
+  <section id="intro" class="intro">
+    <h1>Com quem você combina para presidente?</h1>
+    <p class="lead">São 15 perguntas sobre decisões que passam pela Presidência. Em cada uma, você se posiciona entre dois caminhos. No fim, suas respostas são comparadas com os planos de governo que os candidatos registraram no TSE, no geral e em cada área.</p>
+    <div class="facts">
+      <div><strong>15</strong><span>perguntas em 6 áreas</span></div>
+      <div><strong>12</strong><span>candidatos registrados</span></div>
+      <div><strong>0</strong><span>respostas armazenadas</span></div>
+    </div>
+    <p class="note">Isto é um teste de afinidade, não uma pesquisa eleitoral: nada do que você responde sai do seu navegador. O resultado mostra proximidade com propostas escritas e não indica em quem votar. Leia os planos completos antes de decidir.</p>
+    <div class="keybar"><button class="key key-confirma" id="startBtn">Começar o teste</button></div>
+  </section>
+
+  <section id="quiz" class="hidden" aria-live="polite">
+    <div class="progress"><span id="progText"></span><span id="topicText"></span></div>
+    <div class="track"><i id="progBar"></i></div>
+    <h2 class="statement" id="statement"></h2>
+    <p class="context" id="context"></p>
+    <div class="poles"><div id="poleA"></div><div id="poleB"></div></div>
+    <div class="scale5" id="scale" role="group" aria-label="Sua posição de 1 a 5"></div>
+    <label class="weight"><input type="checkbox" id="weight"> Este tema pesa mais na minha decisão</label>
+    <div class="keybar">
+      <button class="key key-corrige" id="backBtn">Voltar</button>
+      <button class="key key-branco" id="skipBtn">Pular</button>
+      <button class="key key-confirma" id="nextBtn" disabled>Confirmar</button>
+    </div>
+  </section>
+
+  <section id="result" class="hidden">
+    <div class="urna" aria-label="Candidato com maior afinidade geral">
+      <div class="screen">
+        <div class="role">Maior afinidade geral para Presidente</div>
+        <div class="digits" id="topDigits"></div>
+        <div class="who"><h2 id="topName"></h2><p id="topParty"></p></div>
+        <div class="pct" id="topPct"></div>
+      </div>
+      <div class="urna-foot" aria-hidden="true">
+        <span style="background:var(--branco)"></span><span style="background:var(--corrige)"></span><span style="background:var(--confirma)"></span>
+      </div>
+    </div>
+
+    <h2 class="section">Quem mais se aproxima de você em cada área</h2>
+    <p class="few">A afinidade geral esconde diferenças: você pode concordar com um candidato na economia e discordar dele na segurança.</p>
+    <table class="dims" id="dimTable"></table>
+
+    <h2 class="section">Afinidade geral com todos os candidatos</h2>
+    <p class="few">Toque em um nome para ver a afinidade por área e, pergunta a pergunta, o que o plano dele propõe.</p>
+    <ol class="rank" id="rank"></ol>
+
+    <div id="fewBlock">
+      <h2 class="section">Sem dados suficientes nestes temas</h2>
+      <p class="few" id="fewList"></p>
+    </div>
+
+    <h2 class="section">Como o cálculo funciona</h2>
+    <p class="method">Cada resposta vai de 1 a 5 entre dois caminhos. A posição de cada candidato foi classificada na mesma escala a partir do plano de governo registrado no TSE. Quanto menor a distância entre você e o candidato numa pergunta, maior a afinidade; temas marcados como importantes contam em dobro. Quando o plano não trata de um tema, aquela pergunta fica fora da conta do candidato. Quem tem poucos temas em comum com você tem a nota puxada para 50%, para que um único acerto não vire 100%.</p>
+    <p class="method">As perguntas tratam de escolhas gerais, e os planos raramente respondem a elas de forma direta. Por isso a classificação de cada candidato é uma interpretação das propostas concretas, que você pode conferir ao abrir cada nome. Algumas perguntas, como as de costumes e de instituições, são abordadas por poucos planos.</p>
+
+    <div class="keybar"><button class="key key-corrige" id="redoBtn">Refazer o teste</button></div>
+  </section>
+
+  <footer>
+    Fonte das posições: planos de governo registrados no TSE pelos 12 candidatos validados (TSE, 11/09/2026), com resumos por tema do site <a href="https://planodegoverno2026.com.br/" target="_blank" rel="noopener">planodegoverno2026.com.br</a>. A classificação na escala é uma interpretação e pode conter simplificações; confira sempre o plano original. Este site não coleta, armazena nem divulga respostas.
+  </footer>
+</main>
+
+<script>
+const PLAN = slug => `https://planodegoverno2026.com.br/candidatos/presidente/${slug}/`;
+
+const CANDS = {
+  lula:{name:"Lula",party:"PT",num:"13",slug:"lula"},
+  flavio:{name:"Flávio Bolsonaro",party:"PL",num:"22",slug:"flavio-bolsonaro"},
+  caiado:{name:"Ronaldo Caiado",party:"PSD",num:"55",slug:"ronaldo-caiado"},
+  zema:{name:"Romeu Zema",party:"Novo",num:"30",slug:"zema"},
+  renan:{name:"Renan Santos",party:"Missão",num:"14",slug:"renan-santos"},
+  cury:{name:"Augusto Cury",party:"Avante",num:"70",slug:"augusto-cury"},
+  grassi:{name:"Wilson Grassi",party:"Democrata",num:"35",slug:"wilson-grassi"},
+  clariana:{name:"Clariana Barão",party:"DC",num:"27",slug:"clariana-barao"},
+  samara:{name:"Samara Martins",party:"UP",num:"80",slug:"samara"},
+  hertz:{name:"Hertz Dias",party:"PSTU",num:"16",slug:"hertz-dias"},
+  edmilson:{name:"Edmilson Costa",party:"PCB",num:"21",slug:"edmilson-costa"},
+  rui:{name:"Rui Costa Pimenta",party:"PCO",num:"29",slug:"rui-costa-pimenta"}
+};
+
+const DIMS = ["Economia","Políticas sociais","Segurança","Meio ambiente","Instituições e costumes","Política externa"];
+
+// pos: [valor de -2 (polo A) a +2 (polo B), base no plano]. Ausente = plano não trata do tema.
+const QUESTIONS = [
+ {dim:"Economia", title:"Papel do Estado na economia",
+  q:"Qual papel o Estado deve ter na economia?",
+  a:"Menor participação, mais espaço para empresas privadas", b:"Maior participação direta e intervenção econômica",
+  pos:{
+   zema:[-2,"Propõe privatizar todas as estatais e PPPs em todos os serviços públicos."],
+   flavio:[-1,"Quer retomar privatizações com critério, cortar ministérios e reduzir o custo de contratar."],
+   renan:[-1,"Aponta as leis trabalhistas como entrave e propõe ajuste fiscal, mas rejeita privatizar tudo."],
+   caiado:[-1,"Diz que a carga tributária já é elevada e foca em gestão e corte de subsídios sem resultado."],
+   grassi:[-1,"Foca em um Estado com menos atrito: imposto único, folha desonerada e aprovação automática por prazo."],
+   cury:[0,"Mantém as estatais e propõe crédito público barato para microempreendedores."],
+   lula:[1,"Defende o Estado como motor do desenvolvimento, com política industrial e Novo PAC."],
+   hertz:[2,"Quer estatizar setores estratégicos e todo o sistema financeiro."],
+   edmilson:[2,"Quer estatizar o sistema financeiro e criar monopólio estatal em energia e saneamento."],
+   rui:[2,"Quer cancelar as privatizações e uma Petrobras 100% estatal."],
+   samara:[2,"Propõe estatizar bancos, grandes monopólios, transporte e planos de saúde."]
+  }},
+ {dim:"Economia", title:"Impostos e gastos públicos",
+  q:"Quando houver conflito, o que é mais importante?",
+  a:"Reduzir impostos e limitar gastos públicos", b:"Manter ou ampliar serviços públicos, mesmo com mais arrecadação",
+  pos:{
+   zema:[-2,"Propõe metas obrigatórias de redução de impostos que forcem o corte de gastos."],
+   caiado:[-1,"Quer ajuste sem aumentos permanentes de impostos e revisão de benefícios fiscais."],
+   flavio:[-1,"Quer reduzir o IVA, os impostos sobre energia e combustíveis e cortar ministérios."],
+   renan:[-1,"Cita necessidade de ajuste fiscal de cerca de R$ 250 bilhões por ano."],
+   grassi:[-1,"Quer isentar de IR até 5 salários mínimos e reduzir o imposto sobre lucro das empresas."],
+   cury:[-1,"Quer concluir a reforma tributária com carga menor ao fim da transição."],
+   lula:[1,"Propõe ampliar programas sociais e seguir taxando os mais ricos."],
+   hertz:[2,"Quer taxar patrimônios bilionários e ampliar serviços públicos estatais."],
+   edmilson:[2,"Propõe impostos sobre fortunas, heranças e dividendos e 10% do PIB para a saúde."],
+   rui:[2,"Defende que não pode haver limite de gastos para a saúde e taxar só os capitalistas."],
+   samara:[2,"Quer taxar fortunas e heranças e destinar 10% do PIB à educação."]
+  }},
+ {dim:"Políticas sociais", title:"Programas sociais",
+  q:"Como devem ser as políticas sociais?",
+  a:"Mais focalizadas nas pessoas de menor renda", b:"Mais amplas e universais",
+  pos:{
+   caiado:[-1,"Quer priorizar grupos vulneráveis e retirar o benefício aos poucos de quem aumenta a renda."],
+   zema:[-1,"Mantém o Bolsa Família com exigência de trabalho ou estudo para adultos aptos."],
+   renan:[-1,"Quer trocar o Bolsa Família por frentes de trabalho e corrigir benefícios só pela inflação."],
+   lula:[0,"Combina programas focalizados (Bolsa Família, Gás do Povo) com serviços gratuitos amplos."],
+   samara:[1,"Propõe isentar de impostos quem vive de salário e serviços públicos 100% estatais."],
+   hertz:[2,"Propõe bolsa de um salário mínimo para desempregados e serviços públicos ampliados."],
+   edmilson:[2,"Quer saúde e educação 100% públicas e restaurantes e mercados populares em todos os municípios."],
+   rui:[2,"Quer Bolsa Família de pelo menos um salário mínimo e anular as dívidas dos trabalhadores."]
+  }},
+ {dim:"Economia", title:"Privatizações e estatais",
+  q:"Em setores com empresas públicas, o que você prefere?",
+  a:"Privatização ou concessão à iniciativa privada", b:"Manter ou expandir a presença estatal",
+  pos:{
+   zema:[-2,"Propõe privatizar todas as estatais e dividir a Petrobras."],
+   flavio:[-1,"Quer retomar o programa de privatizações, caso a caso."],
+   renan:[0,"Rejeita privatizar tudo e não lista estatais à venda."],
+   cury:[1,"Não propõe privatizações; usa lucros das estatais para financiar empreendedorismo."],
+   lula:[2,"Nenhuma privatização; a Petrobras voltaria a distribuir combustíveis."],
+   hertz:[2,"Quer estatizar mineração, petróleo e energia e reverter privatizações."],
+   edmilson:[2,"Quer reestatizar a Eletrobras e federalizar o saneamento."],
+   rui:[2,"Quer cancelar todas as privatizações já feitas."],
+   samara:[2,"Propõe reestatizar as empresas privatizadas."]
+  }},
+ {dim:"Segurança", title:"Segurança pública",
+  q:"No combate à criminalidade, o que deve ser prioridade?",
+  a:"Mais punição, policiamento e capacidade repressiva", b:"Prevenção, investigação, educação e políticas sociais",
+  pos:{
+   flavio:[-2,"Quer facções declaradas narcoterroristas e meio milhão de novas vagas prisionais."],
+   caiado:[-2,"Quer facções como terrorismo doméstico e Forças Armadas atuando sem decreto de GLO."],
+   zema:[-2,"Quer Forças Armadas para retomar territórios e presídios em regiões remotas."],
+   renan:[-2,"Propõe guerra ao crime, Estado de Defesa em áreas dominadas e superpresídios."],
+   grassi:[-1,"Quer isolar líderes em presídios federais e investigação patrimonial integrada."],
+   lula:[1,"Prioriza asfixia financeira das facções e câmeras corporais nos policiais."],
+   cury:[1,"Propõe força municipal de prevenção e asfixia do dinheiro do crime."],
+   clariana:[1,"Quer sufocar facções pela inteligência financeira, com devido processo legal."],
+   samara:[1,"Propõe desmilitarizar as polícias."],
+   hertz:[2,"Quer investigação e asfixia financeira em vez de operações militares."],
+   edmilson:[2,"Quer desmilitarizar e unificar as polícias e acabar com a guerra às drogas."],
+   rui:[2,"Quer dissolver a polícia militar."]
+  }},
+ {dim:"Segurança", title:"Legislação penal",
+  q:"Para onde a legislação penal deve caminhar?",
+  a:"Penas mais rígidas e mais tempo de prisão", b:"Ressocialização, penas alternativas e menos encarceramento",
+  pos:{
+   flavio:[-2,"Defende maioridade penal aos 16 e fim da progressão de regime para crimes hediondos."],
+   caiado:[-2,"Propõe pena mínima de 45 anos para integrantes de facções e progressão só após 90% da pena."],
+   zema:[-2,"Quer maioridade penal aos 16 em crimes graves e prisão sem soltura na terceira reincidência."],
+   renan:[-2,"Propõe retirar direitos civis e políticos de associados a facções."],
+   hertz:[2,"Quer descriminalizar o uso de drogas e revogar a Lei Antidrogas."],
+   edmilson:[2,"Defende medidas contra o encarceramento em massa e é contra reduzir a maioridade penal."]
+  }},
+ {dim:"Políticas sociais", title:"Educação",
+  q:"O que é mais importante para melhorar a educação?",
+  a:"Mais investimento e atuação pública", b:"Eficiência, avaliação e mais participação privada",
+  pos:{
+   hertz:[-2,"Quer proibir dinheiro público para grupos privados e mais vagas públicas em tempo integral."],
+   edmilson:[-2,"Quer ensino 100% público, estatizando a rede privada."],
+   rui:[-2,"Quer mais verbas e dinheiro público só para o ensino público."],
+   samara:[-2,"Quer destinar 10% do PIB à educação."],
+   lula:[-1,"Propõe ampliar o Pé-de-Meia, o tempo integral e 111 novos Institutos Federais."],
+   cury:[0,"Combina escola em tempo integral com cobrança de resultados das universidades."],
+   caiado:[1,"Propõe material baseado em evidências, avaliação diagnóstica e parcerias com empresas."],
+   clariana:[1,"Defende formação baseada em evidências e avaliação frequente."],
+   grassi:[1,"Quer condicionar o apoio federal a resultados publicados escola por escola."],
+   renan:[1,"Propõe método fônico, fim da aprovação automática e bolsas por mérito."],
+   flavio:[2,"Quer vouchers para escola privada e repasses vinculados a metas."],
+   zema:[2,"Quer escolas conveniadas com o setor privado, homeschooling e financiamento por desempenho."]
+  }},
+ {dim:"Políticas sociais", title:"Saúde",
+  q:"O que o país deve priorizar na saúde?",
+  a:"Expansão do SUS e oferta pública direta", b:"Combinação maior com o setor privado contratado pelo Estado",
+  pos:{
+   hertz:[-2,"Quer SUS 100% estatal, sem OSs e PPPs."],
+   edmilson:[-2,"Quer estatizar o setor privado de saúde."],
+   samara:[-2,"Quer acabar com os planos privados e SUS 100% estatal."],
+   rui:[-2,"Propõe plano de emergência para construir hospitais e postos públicos."],
+   lula:[0,"Aposta em mutirões de especialistas e na Farmácia Popular gratuita."],
+   grassi:[0,"Propõe mutirões permanentes de exames e cirurgias pagos por resultado."],
+   flavio:[1,"Quer contratar a rede privada nos horários ociosos para reduzir filas."],
+   zema:[2,"Quer contratar capacidade privada, expandir hospitais por PPPs e OSs e flexibilizar planos."]
+  }},
+ {dim:"Economia", title:"Direitos trabalhistas",
+  q:"Que tipo de legislação trabalhista você prefere?",
+  a:"Mais proteção definida por lei", b:"Mais liberdade de negociação entre trabalhador e empresa",
+  pos:{
+   lula:[-2,"Quer acabar com a 6x1 por lei e incluir previdência na regulação dos aplicativos."],
+   hertz:[-2,"Quer revogar a reforma trabalhista e carteira assinada para aplicativos."],
+   edmilson:[-2,"Quer revogar a reforma trabalhista e acabar com as terceirizações."],
+   rui:[-2,"Propõe jornada de 35 horas e reajuste automático de salários."],
+   samara:[-2,"Quer revogar a reforma trabalhista e jornada de 36 horas."],
+   renan:[1,"Defende flexibilizar as leis trabalhistas."],
+   flavio:[2,"Defende que o negociado prevaleça sobre o legislado."],
+   zema:[2,"Propõe regime alternativo à CLT negociado diretamente e fim do sindicato único."]
+  }},
+ {dim:"Meio ambiente", title:"Meio ambiente e desenvolvimento",
+  q:"Quando uma atividade econômica relevante causar impacto ambiental significativo, o que priorizar?",
+  a:"Regras ambientais mais restritivas", b:"Flexibilizar para permitir investimento e emprego",
+  pos:{
+   edmilson:[-2,"Quer rever o Código Florestal para ampliar a proteção e taxar emissões."],
+   hertz:[-2,"Quer cortar subsídios ao grande agro e transição para agricultura sem agrotóxicos."],
+   lula:[-1,"Propõe zerar o desmatamento líquido até 2030 e cumprir a meta climática na ONU."],
+   samara:[-1,"Quer proibir agrotóxicos já banidos no exterior."],
+   cury:[-1,"Defende 90% de matriz energética limpa até 2040 e combate a incêndios."],
+   caiado:[0,"Quer licenciamento proporcional ao impacto, sem rebaixar a exigência ambiental."],
+   grassi:[1,"Quer prazo para licenças e regulamentar mineração em terra indígena com condições."],
+   renan:[1,"Propõe acelerar licenças ambientais e padrões para mineração."],
+   zema:[1,"Quer aplicar a lei que acelera licenças, sem impor novas restrições."],
+   flavio:[2,"Defende licença ambiental concedida automaticamente se o órgão não decidir no prazo."]
+  }},
+ {dim:"Meio ambiente", title:"Política energética",
+  q:"Qual deve ser a prioridade energética do Brasil?",
+  a:"Transição mais rápida para fontes renováveis", b:"Explorar petróleo e gás por mais tempo, com transição gradual",
+  pos:{
+   hertz:[-2,"É contra explorar petróleo na Margem Equatorial."],
+   cury:[-1,"Defende 90% de matriz energética limpa até 2040."],
+   edmilson:[-1,"Quer taxar emissões de gases poluentes."],
+   flavio:[1,"Propõe reduzir impostos sobre combustíveis e energia."]
+  }},
+ {dim:"Instituições e costumes", title:"Costumes e liberdades individuais",
+  q:"Em temas de comportamento e escolhas pessoais, o que você prefere?",
+  a:"Que o Estado interfira o mínimo possível", b:"Que as leis expressem valores e limites sociais",
+  pos:{
+   edmilson:[-2,"Propõe descriminalizar o uso de drogas e legalizar a maconha."],
+   hertz:[-2,"Propõe descriminalizar o uso de drogas."],
+   lula:[-1,"Propõe fortalecer direitos da população LGBTQIA+ e ações afirmativas."],
+   flavio:[1,"Defende escola sem doutrinação e castração química para estupradores."],
+   renan:[1,"Defende internação compulsória de moradores de rua e código de conduta do estudante."]
+  }},
+ {dim:"Instituições e costumes", title:"Instituições e poderes",
+  q:"Em conflitos políticos, o que é mais importante?",
+  a:"Preservar os limites e contrapesos entre os Poderes", b:"Dar mais capacidade de ação ao governo eleito",
+  pos:{
+   cury:[-1,"Propõe semipresidencialismo, com primeiro-ministro apoiado pelo Congresso."],
+   renan:[1,"Propõe Estado de Defesa em áreas dominadas e fusão compulsória de municípios."],
+   edmilson:[1,"Propõe nova Constituinte e orçamento decidido por conselhos populares."]
+  }},
+ {dim:"Política externa", title:"Relações internacionais",
+  q:"O que o Brasil deve priorizar na política externa?",
+  a:"Relações pragmáticas com todos, independentemente de regime", b:"Aproximar-se de países com valores políticos semelhantes",
+  pos:{
+   caiado:[-2,"Quer relações com todos os blocos, sem alinhamentos automáticos."],
+   grassi:[-2,"Sem alinhamento fixo; cada decisão passa pelo que o Brasil ganha."],
+   cury:[-1,"Quer seguir o mapa do comércio, deslocando diplomatas para Ásia e Oriente Médio."],
+   renan:[-1,"Quer o Brasil como árbitro do Sul Global, com pragmatismo no BRICS."],
+   lula:[-1,"Aposta no multilateralismo, no BRICS e no Mercosul."],
+   flavio:[1,"Propõe reaproximação com EUA, Argentina e Israel."],
+   zema:[1,"Propõe sair do BRICS e entrar na OCDE."],
+   hertz:[1,"Propõe romper com a dominação dos EUA e da Europa."],
+   samara:[1,"Propõe encerrar a submissão aos países que chama de imperialistas."],
+   edmilson:[2,"Defende solidariedade a Cuba, Venezuela e Irã e romper relações com Israel."],
+   rui:[2,"Declara apoio a Cuba, Venezuela, Nicarágua, Irã e Rússia."]
+  }},
+ {dim:"Economia", title:"Prioridade econômica",
+  q:"Quando os objetivos entrarem em conflito no curto prazo, o que é mais importante?",
+  a:"Controlar inflação, dívida e contas públicas", b:"Estimular crescimento, emprego e renda, mesmo com mais gasto",
+  pos:{
+   zema:[-2,"Propõe metas obrigatórias de redução de impostos que forcem corte de gastos."],
+   caiado:[-2,"Propõe um Orçamento da Verdade e ajuste sem aumento de impostos."],
+   renan:[-2,"Propõe emenda constitucional de ajuste fiscal antes da posse."],
+   flavio:[-1,"Quer reforma administrativa, corte de ministérios e fim de supersalários."],
+   clariana:[-1,"Quer revisar gastos e subsídios com avaliação de impacto."],
+   lula:[1,"Defende grandes obras públicas e compras do governo puxando a produção."],
+   samara:[2,"Quer dobrar o salário mínimo e frentes emergenciais de trabalho."],
+   hertz:[2,"Quer suspender o pagamento da dívida pública aos grandes investidores."],
+   edmilson:[2,"Quer frentes de trabalho e recuperar o salário mínimo até o piso do Dieese."],
+   rui:[2,"Defende que não pode haver limite de gastos para salvar vidas."]
+  }}
+];
+
+const MIN_TOPICS = 3, PRIOR = 1.5;
+let idx = 0, answers = QUESTIONS.map(()=>({v:null,w:false}));
+const $ = id => document.getElementById(id);
+const show = id => ["intro","quiz","result"].forEach(s => $(s).classList.toggle("hidden", s!==id));
+
+function render(){
+  const q = QUESTIONS[idx], a = answers[idx];
+  $("progText").textContent = `Pergunta ${idx+1} de ${QUESTIONS.length}`;
+  $("topicText").textContent = q.dim;
+  $("progBar").style.width = `${idx/QUESTIONS.length*100}%`;
+  $("statement").textContent = q.q;
+  $("context").textContent = q.title;
+  $("poleA").innerHTML = `<small>1</small>${q.a}`;
+  $("poleB").innerHTML = `<small>5</small>${q.b}`;
+  $("weight").checked = a.w;
+  const labels = ["Totalmente o 1","Mais para o 1","No meio","Mais para o 5","Totalmente o 5"];
+  const sc = $("scale"); sc.innerHTML = "";
+  [-2,-1,0,1,2].forEach((v,i) => {
+    const b = document.createElement("button");
+    b.type="button"; b.innerHTML = `${i+1}<span>${labels[i]}</span>`;
+    b.setAttribute("aria-label", `${i+1}: ${labels[i]}`);
+    b.setAttribute("aria-pressed", a.v===v ? "true":"false");
+    b.onclick = () => { a.v=v; render(); };
+    sc.appendChild(b);
+  });
+  $("backBtn").disabled = idx===0;
+  $("nextBtn").disabled = a.v===null;
+  $("nextBtn").textContent = idx===QUESTIONS.length-1 ? "Confirmar e ver resultado" : "Confirmar";
+}
+function advance(){ if (idx<QUESTIONS.length-1){ idx++; render(); window.scrollTo(0,0);} else results(); }
+
+function agg(id, filter){
+  let sum=0,wsum=0,n=0;
+  QUESTIONS.forEach((q,i)=>{
+    const p=q.pos[id], a=answers[i];
+    if(!p || a.v===null || (filter && q.dim!==filter)) return;
+    const w=a.w?2:1; sum+=w*(1-Math.abs(a.v-p[0])/4); wsum+=w; n++;
+  });
+  return {pct: wsum ? (sum+0.5*PRIOR)/(wsum+PRIOR) : null, n};
+}
+const pctTxt = p => `${Math.round(p*100)}%`;
+function tag(v){
+  if (v===0) return `<span class="tag t-mid">No meio (3)</span>`;
+  return `<span class="tag ${v<0?'t-neg':'t-pos'}">Mais para o ${v+3}</span>`;
+}
+const you = v => v===null ? "você pulou" : `você: ${v+3}`;
+
+function results(){
+  const all = Object.entries(CANDS).map(([id,c])=>({id,...c,...agg(id),
+    dims:DIMS.map(d=>({d,...agg(id,d)}))}));
+  const ranked = all.filter(c=>c.n>=MIN_TOPICS).sort((a,b)=>b.pct-a.pct);
+  const few = all.filter(c=>c.n<MIN_TOPICS);
+
+  if(!ranked.length){
+    $("topDigits").innerHTML="<span></span><span></span>";
+    $("topName").textContent="Respostas insuficientes";
+    $("topParty").textContent="Responda mais perguntas para comparar.";
+    $("topPct").textContent="";
+  } else {
+    const t=ranked[0];
+    $("topDigits").innerHTML=t.num.split("").map(d=>`<span>${d}</span>`).join("");
+    $("topName").textContent=t.name; $("topParty").textContent=t.party;
+    $("topPct").textContent=`${pctTxt(t.pct)} de afinidade em ${t.n} perguntas em comum`;
+  }
+
+  $("dimTable").innerHTML = DIMS.map(d=>{
+    const answered = QUESTIONS.some((q,i)=>q.dim===d && answers[i].v!==null);
+    if(!answered) return `<tr><th>${d}</th><td>Você pulou as perguntas desta área.</td></tr>`;
+    const list = ranked.map(c=>({c,...c.dims.find(x=>x.d===d)})).filter(x=>x.n>0).sort((a,b)=>b.pct-a.pct).slice(0,3);
+    const sparse = list.length && list.every(x=>x.n===1) ? `<div class="sparse">Poucos planos tratam desta área; leia com cautela.</div>` : "";
+    return `<tr><th>${d}</th><td>${list.length ? list.map(x=>`${x.c.name} (${x.c.party}) ${pctTxt(x.pct)}`).join("<br>") : "Nenhum plano trata desta área."}${sparse}</td></tr>`;
+  }).join("");
+
+  $("rank").innerHTML = ranked.map(c=>`
+    <li>
+      <button type="button" aria-expanded="false" data-id="${c.id}">
+        <span class="num">${c.num}</span>
+        <span><span class="name">${c.name}</span> <span class="meta">${c.party}, ${c.n} perguntas em comum</span>
+          <span class="bar"><i style="width:${pctTxt(c.pct)}"></i></span></span>
+        <span class="score">${pctTxt(c.pct)}</span>
+      </button>
+      <div class="detail hidden" id="d-${c.id}">
+        <div class="dimbars">${c.dims.filter(x=>x.n>0).map(x=>`<div><span>${x.d}</span><span class="bar"><i style="width:${pctTxt(x.pct)}"></i></span><b>${pctTxt(x.pct)}</b></div>`).join("")}</div>
+        <table>${QUESTIONS.map((q,i)=>q.pos[c.id]?`<tr><td><strong>${q.title}</strong><br>1 = ${q.a.toLowerCase()}; 5 = ${q.b.toLowerCase()}<br><em>${you(answers[i].v)}</em></td><td>${tag(q.pos[c.id][0])}<br>${q.pos[c.id][1]}</td></tr>`:"").join("")}</table>
+        <p style="margin-top:10px"><a href="${PLAN(c.slug)}" target="_blank" rel="noopener">Ler o plano completo de ${c.name}</a></p>
+      </div>
+    </li>`).join("");
+  $("rank").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    const d=$("d-"+b.dataset.id), closed=d.classList.toggle("hidden");
+    b.setAttribute("aria-expanded", closed?"false":"true");
+  });
+
+  $("fewBlock").classList.toggle("hidden", !few.length);
+  $("fewList").innerHTML = few.length ? "Estes candidatos têm menos de 3 perguntas em comum com as suas respostas, então a comparação não seria confiável: " +
+    few.map(c=>`<a href="${PLAN(c.slug)}" target="_blank" rel="noopener">${c.name} (${c.party}, ${c.num})</a>`).join(", ")+"." : "";
+  show("result"); window.scrollTo(0,0);
+}
+
+$("startBtn").onclick=()=>{show("quiz");render();};
+$("nextBtn").onclick=advance;
+$("skipBtn").onclick=()=>{answers[idx].v=null;advance();};
+$("backBtn").onclick=()=>{if(idx>0){idx--;render();}};
+$("weight").onchange=e=>{answers[idx].w=e.target.checked;};
+$("redoBtn").onclick=()=>{idx=0;answers=QUESTIONS.map(()=>({v:null,w:false}));show("intro");window.scrollTo(0,0);};
+</script>
+</body>
+</html>
